@@ -46,3 +46,20 @@ out/
 _site/
 *.css
 !petclinic.css
+
+### AI agent session/local files ###
+.claude/
+.cursor/
+.codex/
+.opencode/
+.copilot/
+.cline/
+.continue/
+.windsurf/
+.junie/
+.pi/
+.roo/
+.augment/
+.aider*
+CLAUDE.local.md
+.agent/

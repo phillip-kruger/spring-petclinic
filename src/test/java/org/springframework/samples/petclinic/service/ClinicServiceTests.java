@@ -1,19 +1,3 @@
-/*
- * Copyright 2012-2025 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,10 +7,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
-import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase.Replace;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.petclinic.owner.Owner;
@@ -37,28 +17,13 @@ import org.springframework.samples.petclinic.owner.PetTypeRepository;
 import org.springframework.samples.petclinic.owner.Visit;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetRepository;
-import org.springframework.transaction.annotation.Transactional;
+
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import io.quarkus.test.TestTransaction;
 
 /**
  * Integration test of the Service and the Repository layer.
- * <p>
- * ClinicServiceSpringDataJpaTests subclasses benefit from the following services provided
- * by the Spring TestContext Framework:
- * </p>
- * <ul>
- * <li><strong>Spring IoC container caching</strong> which spares us unnecessary set up
- * time between test execution.</li>
- * <li><strong>Dependency Injection</strong> of test fixture instances, meaning that we
- * don't need to perform application context lookups. See the use of
- * {@link Autowired @Autowired} on the <code> </code> instance variable, which uses
- * autowiring <em>by type</em>.
- * <li><strong>Transaction management</strong>, meaning each test method is executed in
- * its own transaction, which is automatically rolled back by default. Thus, even if tests
- * insert or otherwise change database state, there is no need for a teardown or cleanup
- * script.
- * <li>An {@link org.springframework.context.ApplicationContext ApplicationContext} is
- * also inherited and can be used for explicit bean lookup if necessary.</li>
- * </ul>
  *
  * @author Ken Krebs
  * @author Rod Johnson
@@ -67,20 +32,17 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Michael Isvy
  * @author Dave Syer
  */
-@DataJpaTest
-// Ensure that if the mysql profile is active we connect to the real database:
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-// @TestPropertySource("/application-postgres.properties")
+@QuarkusTest
 class ClinicServiceTests {
 
-	@Autowired
-	protected OwnerRepository owners;
+	@Inject
+	OwnerRepository owners;
 
-	@Autowired
-	protected PetTypeRepository types;
+	@Inject
+	PetTypeRepository types;
 
-	@Autowired
-	protected VetRepository vets;
+	@Inject
+	VetRepository vets;
 
 	private final Pageable pageable = Pageable.unpaged();
 
@@ -105,7 +67,7 @@ class ClinicServiceTests {
 	}
 
 	@Test
-	@Transactional
+	@TestTransaction
 	void shouldInsertOwner() {
 		Page<Owner> owners = this.owners.findByLastNameStartingWith("Schultz", pageable);
 		int found = (int) owners.getTotalElements();
@@ -124,7 +86,7 @@ class ClinicServiceTests {
 	}
 
 	@Test
-	@Transactional
+	@TestTransaction
 	void shouldUpdateOwner() {
 		Optional<Owner> optionalOwner = this.owners.findById(1);
 		assertThat(optionalOwner).isPresent();
@@ -153,7 +115,7 @@ class ClinicServiceTests {
 	}
 
 	@Test
-	@Transactional
+	@TestTransaction
 	void shouldInsertPetIntoDatabaseAndGenerateId() {
 		Optional<Owner> optionalOwner = this.owners.findById(6);
 		assertThat(optionalOwner).isPresent();
@@ -181,7 +143,7 @@ class ClinicServiceTests {
 	}
 
 	@Test
-	@Transactional
+	@TestTransaction
 	void shouldUpdatePetName() {
 		Optional<Owner> optionalOwner = this.owners.findById(6);
 		assertThat(optionalOwner).isPresent();
@@ -213,7 +175,7 @@ class ClinicServiceTests {
 	}
 
 	@Test
-	@Transactional
+	@TestTransaction
 	void shouldAddNewVisitForPet() {
 		Optional<Owner> optionalOwner = this.owners.findById(6);
 		assertThat(optionalOwner).isPresent();
