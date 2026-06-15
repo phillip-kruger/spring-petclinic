@@ -19,9 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.core.style.ToStringCreator;
 import org.springframework.samples.petclinic.model.Person;
-import org.springframework.util.Assert;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -146,14 +144,10 @@ public class Owner extends Person {
 
 	@Override
 	public String toString() {
-		return new ToStringCreator(this).append("id", this.getId())
-			.append("new", this.isNew())
-			.append("lastName", this.getLastName())
-			.append("firstName", this.getFirstName())
-			.append("address", this.address)
-			.append("city", this.city)
-			.append("telephone", this.telephone)
-			.toString();
+		return String.format(
+				"[Owner@%x id=%d, new=%b, lastName='%s', firstName='%s', address='%s', city='%s', telephone='%s']",
+				System.identityHashCode(this), this.getId(), this.isNew(), this.getLastName(), this.getFirstName(),
+				this.address, this.city, this.telephone);
 	}
 
 	/**
@@ -163,12 +157,12 @@ public class Owner extends Person {
 	 */
 	public void addVisit(Integer petId, Visit visit) {
 
-		Assert.notNull(petId, "Pet identifier must not be null!");
-		Assert.notNull(visit, "Visit must not be null!");
+		Objects.requireNonNull(petId, "Pet identifier must not be null!");
+		Objects.requireNonNull(visit, "Visit must not be null!");
 
 		Pet pet = getPet(petId);
 
-		Assert.notNull(pet, "Invalid Pet identifier!");
+		Objects.requireNonNull(pet, "Invalid Pet identifier!");
 
 		pet.addVisit(visit);
 	}

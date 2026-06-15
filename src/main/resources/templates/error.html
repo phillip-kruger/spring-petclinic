@@ -1,21 +1,23 @@
-<!DOCTYPE html>
+{@java.lang.String menu="error"}
+{@int status=500}
+{@java.lang.String message=""}
+{#include base.html}
+{#content}
 
-<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'error')}">
+  <img src="/resources/images/pets.png">
+  <h2>Something happened...</h2>
 
-<body>
-  <img src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" />
-  <!-- Title: Something happened -->
-  <h2 th:text="#{somethingHappened}">Something happened...</h2>
+  {#if status == 404}
+    <p>The requested page was not found.</p>
+  {#else if status == 500}
+    <p>An internal server error occurred.</p>
+  {#else}
+    <p>An unexpected error occurred.</p>
+  {/if}
 
-  <!-- Status-specific error message -->
-  <p th:switch="${status}">
-    <span th:case="404" th:text="#{error.404}">The requested page was not found.</span>
-    <span th:case="500" th:text="#{error.500}">An internal server error occurred.</span>
-    <span th:case="*" th:text="#{error.general}">An unexpected error occurred.</span>
-  </p>
+  {#if message}
+    <p>{message}</p>
+  {/if}
 
-  <!-- Exception message (for developers) -->
-  <p th:text="${message}">Exception message</p>
-</body>
-
-</html>
+{/content}
+{/include}

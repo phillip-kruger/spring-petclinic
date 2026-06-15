@@ -1,25 +1,88 @@
-<!DOCTYPE html>
+{@java.lang.String menu="owners"}
+{@org.springframework.samples.petclinic.owner.Owner owner}
+{@java.util.Map<String, String> errors}
+{@boolean isNew}
+{#include base.html}
+{#content}
 
-<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'owners')}">
-
-<body>
-
-  <h2 th:text="#{owner}">Owner</h2>
-  <form th:object="${owner}" class="form-horizontal" id="add-owner-form" method="post">
+  <h2>Owner</h2>
+  <form class="form-horizontal" id="add-owner-form" method="post">
     <div class="form-group has-feedback">
-      <input th:replace="~{fragments/inputField :: input (#{firstName}, 'firstName', 'text')}" />
-      <input th:replace="~{fragments/inputField :: input (#{lastName}, 'lastName', 'text')}" />
-      <input th:replace="~{fragments/inputField :: input (#{address}, 'address', 'text')}" />
-      <input th:replace="~{fragments/inputField :: input (#{city}, 'city', 'text')}" />
-      <input th:replace="~{fragments/inputField :: input (#{telephone}, 'telephone', 'text')}" />
+
+      <div class="{#if errors.get('firstName')}form-group has-error{#else}form-group{/if}">
+        <label class="col-sm-2 control-label" for="firstName">First Name</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" id="firstName" name="firstName" value="{owner.firstName}">
+          {#if errors.get('firstName')}
+            <span class="fa fa-remove form-control-feedback" aria-hidden="true"></span>
+            <span class="help-inline">{errors.get('firstName')}</span>
+          {#else}
+            <span class="fa fa-ok form-control-feedback" aria-hidden="true"></span>
+          {/if}
+        </div>
+      </div>
+
+      <div class="{#if errors.get('lastName')}form-group has-error{#else}form-group{/if}">
+        <label class="col-sm-2 control-label" for="lastName">Last Name</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" id="lastName" name="lastName" value="{owner.lastName}">
+          {#if errors.get('lastName')}
+            <span class="fa fa-remove form-control-feedback" aria-hidden="true"></span>
+            <span class="help-inline">{errors.get('lastName')}</span>
+          {#else}
+            <span class="fa fa-ok form-control-feedback" aria-hidden="true"></span>
+          {/if}
+        </div>
+      </div>
+
+      <div class="{#if errors.get('address')}form-group has-error{#else}form-group{/if}">
+        <label class="col-sm-2 control-label" for="address">Address</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" id="address" name="address" value="{owner.address}">
+          {#if errors.get('address')}
+            <span class="fa fa-remove form-control-feedback" aria-hidden="true"></span>
+            <span class="help-inline">{errors.get('address')}</span>
+          {#else}
+            <span class="fa fa-ok form-control-feedback" aria-hidden="true"></span>
+          {/if}
+        </div>
+      </div>
+
+      <div class="{#if errors.get('city')}form-group has-error{#else}form-group{/if}">
+        <label class="col-sm-2 control-label" for="city">City</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" id="city" name="city" value="{owner.city}">
+          {#if errors.get('city')}
+            <span class="fa fa-remove form-control-feedback" aria-hidden="true"></span>
+            <span class="help-inline">{errors.get('city')}</span>
+          {#else}
+            <span class="fa fa-ok form-control-feedback" aria-hidden="true"></span>
+          {/if}
+        </div>
+      </div>
+
+      <div class="{#if errors.get('telephone')}form-group has-error{#else}form-group{/if}">
+        <label class="col-sm-2 control-label" for="telephone">Telephone</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" id="telephone" name="telephone" value="{owner.telephone}">
+          {#if errors.get('telephone')}
+            <span class="fa fa-remove form-control-feedback" aria-hidden="true"></span>
+            <span class="help-inline">{errors.get('telephone')}</span>
+          {#else}
+            <span class="fa fa-ok form-control-feedback" aria-hidden="true"></span>
+          {/if}
+        </div>
+      </div>
+
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <button th:with="text=${owner['new']} ? #{addOwner} : #{updateOwner}" class="btn btn-primary" type="submit"
-          th:text="${text}">Add Owner</button>
+        <button class="btn btn-primary" type="submit">
+          {#if isNew}Add Owner{#else}Update Owner{/if}
+        </button>
       </div>
     </div>
   </form>
-</body>
 
-</html>
+{/content}
+{/include}
